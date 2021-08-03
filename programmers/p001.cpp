@@ -24,6 +24,5 @@ string solution(vector<string> participant, vector<string> completion) {
             answer = h.first;
 
     cout << answer << endl;
-    return answer;
-    
+    return answer;  
 }
