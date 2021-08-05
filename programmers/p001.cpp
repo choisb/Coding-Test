@@ -1,3 +1,7 @@
+// 문제 : 완주하지 못한 선수 (Level 1)
+// 출처 : 프로그래머스 (https://programmers.co.kr/learn/courses/30/lessons/42576)
+// 풀이 : https://dev-sbee.tistory.com/ 참고
+
 #include <string>
 #include <vector>
 #include <unordered_map>
