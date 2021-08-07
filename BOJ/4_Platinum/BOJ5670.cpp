@@ -11,12 +11,12 @@
 using namespace std;
 
 struct Node {
-    Node() : isEnd(false), links{}, childCount(0)
+    Node() : isEnd(false), links{}, numChild(0)
     {}
 
     array<Node*, 26> links;
     bool isEnd;
-    int childCount;
+    int numChild;
     static size_t GetIndex(char ch) { return ch - 'a'; }
 };
 class Trie {
@@ -43,7 +43,7 @@ void Trie::Insert(const string& word)
         if (cur->links[idx] == nullptr)
         {
             cur->links[idx] = new Node();
-            cur->childCount++;
+            cur->numChild++;
         }
         cur = cur->links[idx];
     }
@@ -78,7 +78,7 @@ void Trie::PreorderTraverse(Node* node, int inputCnt)
         inputCnt++;
     }
     // 자식 노드가 1개보다 많다면, 새로운 입력을 받아야 한다.
-    else if (node->childCount > 1)
+    else if (node->numChild > 1)
     {
         inputCnt++;
     }
@@ -129,6 +129,5 @@ int main()
         }
         cout << trie.Solution() << endl;
     }
-
     return 0;
 }
