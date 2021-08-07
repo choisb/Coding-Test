@@ -3,7 +3,7 @@
 // 풀이 : https://dev-sbee.tistory.com/ 참고
 
 #include <iostream>
-#include <unordered_map>
+#include <array>
 #include <string>
 #include <cmath>
 #define endl '\n'
@@ -11,35 +11,41 @@
 using namespace std;
 
 struct Node {
-    Node() : isEnd(false){}
+    Node() : isEnd(false), links{}, childCount(0)
+    {}
 
-    unordered_map<char, Node*> links;
+    array<Node*, 26> links;
     bool isEnd;
+    int childCount;
+    static size_t GetIndex(char ch) { return ch - 'a'; }
 };
 class Trie {
 public:
     Trie() : totalInput(0), size(0) { root = new Node(); }
     ~Trie() { DeleteLinks(root); }
     void Insert(const string& word);
-    float Solution();  
+    float Solution();
 
 private:
-    void PreorderTraverse(Node* node, char key, int inputCnt);  // 노드 탐색을 위한 재귀함수
+    void PreorderTraverse(Node* node, int inputCnt);  // 노드 탐색을 위한 재귀함수
     void DeleteLinks(Node* node);   // 전체 노드 삭제를 위한 제귀함수
     Node* root;
     int totalInput; // 자동완성을 위해서 입력해야하는 총 input 수 
-    int size;   // 노드의 개수
+    int size;   // 문자열의 개수
 };
 void Trie::Insert(const string& word)
 {
     Node* cur = root;
     for (size_t i = 0; i < word.length(); ++i)
     {
-        if (cur->links[word[i]] == nullptr)
+        size_t idx = Node::GetIndex(word[i]);
+
+        if (cur->links[idx] == nullptr)
         {
-            cur->links[word[i]] = new Node();
+            cur->links[idx] = new Node();
+            cur->childCount++;
         }
-        cur = cur->links[word[i]];
+        cur = cur->links[idx];
     }
     cur->isEnd = true;
     size++;
@@ -48,20 +54,21 @@ float Trie::Solution()
 {
     totalInput = 0;
 
-    // root 노드의 모든 자식 노드에 대해서 탐색 진행
+    // root 노드의 모든 자식 노드에 대해서 탐색을 진행 하며 totalInput값을 계산
     for (auto child : root->links)
     {
-        PreorderTraverse(child.second, child.first, 1);
+        if(child != nullptr)
+            PreorderTraverse(child, 1);
     }
 
     // 계산된 totalInput의 평균을 구하고, 소수 둘째 자리에서 반올림
     float retVal = static_cast<float>(totalInput) / size;
     retVal = round(retVal * 100) / 100;
 
-    return retVal;  
+    return retVal;
 }
 
-void Trie::PreorderTraverse(Node* node, char key, int inputCnt)
+void Trie::PreorderTraverse(Node* node, int inputCnt)
 {
     // 현재 노드가 끝 노드일 때 다음 노드로 가기 위해서는 입력을 하나 더 받아야 한다.
     // 그리고 지금까지의 inputCnt를 totalInput에 더해야 한다.
@@ -71,11 +78,11 @@ void Trie::PreorderTraverse(Node* node, char key, int inputCnt)
         inputCnt++;
     }
     // 자식 노드가 1개보다 많다면, 새로운 입력을 받아야 한다.
-    else if (node->links.size() > 1)
+    else if (node->childCount > 1)
     {
         inputCnt++;
     }
-    else 
+    else
     {
         // 자식 노드가 한개 && 현재 노드가 isEnd가 아니라면 inputCnt를 증가시키지 않는다.
     }
@@ -83,16 +90,17 @@ void Trie::PreorderTraverse(Node* node, char key, int inputCnt)
     // 자식 노드가 있다면 탐색을 더 진행한다.
     for (auto child : node->links)
     {
-        PreorderTraverse(child.second, child.first,inputCnt);
+        if (child != nullptr)
+            PreorderTraverse(child, inputCnt);
     }
 }
 void Trie::DeleteLinks(Node* node)
 {
     for (auto child : node->links)
     {
-        if (child.second != nullptr)
+        if (child != nullptr)
         {
-            DeleteLinks(child.second);
+            DeleteLinks(child);
         }
     }
     delete node;
@@ -108,12 +116,12 @@ int main()
     cout.precision(2);
     cout << fixed;
 
-    unsigned int N;  // 입력 받을 문자열 개수
-    while (cin >> N) 
+    size_t N;  // 입력 받을 문자열 개수
+    while (cin >> N)
     {
         Trie trie;
 
-        for(size_t i = 0; i < N; ++i)
+        for (size_t i = 0; i < N; ++i)
         {
             string word;
             cin >> word;
