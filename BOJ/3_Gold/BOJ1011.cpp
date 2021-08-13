@@ -1,4 +1,4 @@
-// 문제 : 문자열 집합 (Silver 1)
+// 문제 : Fly me to the Alpha Centauri (Gold 5)
 // 출처 : 백준 (https://www.acmicpc.net/problem/1011)
 // 풀이 : https://dev-sbee.tistory.com/ 참고
 #include <iostream>
