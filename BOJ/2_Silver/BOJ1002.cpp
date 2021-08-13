@@ -1,4 +1,4 @@
-// 문제 : 문자열 집합 (Silver 4)
+// 문제 : 터렛 (Silver 4)
 // 출처 : 백준 (https://www.acmicpc.net/problem/1002)
 // 풀이 : https://dev-sbee.tistory.com/ 참고
 #include <iostream>
