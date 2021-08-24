@@ -23,12 +23,12 @@ int main() {
     int N;  // 집의 수 2 <= N <= 1'000
     cin >> N;
 
-    int cost[Color_MAX]{};
-    int cache[Color_MAX]{};
+    array<int, Color_MAX> cost{};
+    array<int, Color_MAX> cache{};
 
     for (int i = 1; i <= N; ++i)
     {
-        int Temp[Color_MAX]{};
+        array<int, Color_MAX> Temp{};
 
         cin >> cost[R] >> cost[G] >> cost[B];
 
