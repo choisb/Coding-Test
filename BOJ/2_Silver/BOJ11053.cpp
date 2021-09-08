@@ -3,56 +3,41 @@
 // 풀이 : https://dev-sbee.tistory.com/ 참고
 
 #include <iostream>
-#include <algorithm>
 #include <array>
+#include <algorithm>
+
 #define endl '\n'
 using namespace std;
 
-int N;  //수열 A의 크기 N (1 ≤ N ≤ 1,000)
-const int MAX = 1'001;
-
-array<int, MAX> a{};
-array<int, MAX> cache{};
-
-int f(int index)
-{
-    if (cache[index] != 0)
-        return cache[index];
-
-    int maxVal = 1;
-
-    for (int next = index + 1; next <= N; ++next)
-    {
-        if (a[next] > a[index])
-        {
-            maxVal = max(f(next) + 1, maxVal);
-        }
-    }
-
-    return cache[index] = maxVal;
-}
-int main()
-{
-    //입출력 성능향상을 위한 설정
+int main() {
+    // 입출력 성능 향상을 위한 설정
     ios_base::sync_with_stdio(false);
     cout.tie(NULL);
     cin.tie(NULL);
 
+    array<int, 1'001> cache{};
+    array<int, 1'001> arr{};
+    array<int, 1'001> list{};
+
+    int N; //N (1 ≤ N ≤ 1,000)
     cin >> N;
+
     for (int i = 1; i <= N; ++i)
     {
-        cin >> a[i];
+        cin >> arr[i];
     }
 
-    cache[N] = 1;
-    int answer = 0;
+    int len{}; // list의 길이 
     for (int i = 1; i <= N; ++i)
     {
-        answer = max(f(i), answer);
+        auto lowerPos = lower_bound(list.begin(), list.begin() + len, arr[i]);
+
+        if (*lowerPos == 0)
+            len++;
+
+        *lowerPos = arr[i];
     }
 
-    cout << answer;
-
+    cout << len;
     return 0;
 }
-
